@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ฟอร์มรับสมัครงาน - บริษัท นวัตกรรมดิจิทัล จำกัด</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: "Prompt", sans-serif;
+        background: linear-gradient(135deg, #6a5af9, #ff6ad5);
+        min-height: 100vh;
+        padding: 40px 0;
+    }
+    .card-form {
+        background: rgba(255, 255, 255, 0.97);
+        border-radius: 20px;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+        padding: 35px;
+        color: #333;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+        color: #fff;
+        text-shadow: 0 3px 6px rgba(0,0,0,0.3);
+    }
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    .form-control, .form-select {
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #6a5af9;
+        box-shadow: 0 0 0 0.25rem rgba(106, 90, 249, 0.25);
+    }
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: 0.25s;
+    }
+    .btn-submit {
+        background-color: #6a5af9;
+        border-color: #6a5af9;
+    }
+    .btn-submit:hover {
+        background-color: #5843f6;
+        border-color: #5843f6;
+    }
+    .btn-reset {
+        background-color: #ff4b5c;
+        border-color: #ff4b5c;
+    }
+    .btn-reset:hover {
+        background-color: #d93b49;
+        border-color: #d93b49;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1><i class="bi bi-briefcase-fill"></i> ฟอร์มรับสมัครงาน</h1>
+    <h2 class="text-center text-white mb-4">บริษัท นวัตกรรมดิจิทัล จำกัด วิทวัส วงศ์ภาคำ 66010914037</h2>
+    
+    <div class="card-form">
+        <form method="post" action="f.php">
+            
+            <h3 class="mb-3 text-primary">ตำแหน่งงานที่ต้องการสมัคร</h3>
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <label for="position" class="form-label">เลือกตำแหน่งที่ต้องการสมัคร <span class="text-danger">*</span></label>
+                    <select class="form-select" id="position" name="position" required>
+                        <option value="">-- กรุณาเลือกตำแหน่งงาน --</option>
+                        <option value="Software Engineer">วิศวกรซอฟต์แวร์ (Software Engineer)</option>
+                        <option value="Data Analyst">นักวิเคราะห์ข้อมูล (Data Analyst)</option>
+                        <option value="UI/UX Designer">นักออกแบบ UI/UX (UI/UX Designer)</option>
+                        <option value="Marketing Specialist">ผู้เชี่ยวชาญด้านการตลาดดิจิทัล (Digital Marketing Specialist)</option>
+                        <option value="Project Coordinator">ผู้ประสานงานโครงการ (Project Coordinator)</option>
+                    </select>
+                </div>
+            </div>
+
+            <h3 class="mb-3 text-primary">ข้อมูลส่วนตัว</h3>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label for="prefix" class="form-label">คำนำหน้าชื่อ <span class="text-danger">*</span></label>
+                    <select class="form-select" id="prefix" name="prefix" required>
+                        <option value="นาย">นาย</option>
+                        <option value="นาง">นาง</option>
+                        <option value="นางสาว">นางสาว</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label for="firstname" class="form-label">ชื่อ (ภาษาไทย) <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="firstname" name="firstname" required>
+                </div>
+
+                <div class="col-md-5 mb-3">
+                    <label for="lastname" class="form-label">นามสกุล (ภาษาไทย) <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="lastname" name="lastname" required>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label for="dob" class="form-label">วันเดือนปีเกิด <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" id="dob" name="dob" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="phone" class="form-label">เบอร์โทรศัพท์</label>
+                    <input type="tel" class="form-control" id="phone" name="phone">
+                </div>
+                <div class="col-md-4">
+                    <label for="email" class="form-label">อีเมล <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+            </div>
+            
+            <hr class="my-4">
+
+            <h3 class="mb-3 text-primary">ข้อมูลการศึกษาและความสามารถ</h3>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="education" class="form-label">ระดับการศึกษาสูงสุด <span class="text-danger">*</span></label>
+                    <select class="form-select" id="education" name="education" required>
+                        <option value="">-- กรุณาเลือกระดับการศึกษา --</option>
+                        <option value="มัธยมปลาย">มัธยมศึกษาตอนปลาย / ปวช.</option>
+                        <option value="อนุปริญญา">อนุปริญญา / ปวส.</option>
+                        <option value="ปริญญาตรี">ปริญญาตรี</option>
+                        <option value="ปริญญาโท">ปริญญาโท</option>
+                        <option value="ปริญญาเอก">ปริญญาเอก</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="institute" class="form-label">ชื่อสถาบันการศึกษาสูงสุด</label>
+                    <input type="text" class="form-control" id="institute" name="institute">
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="skills" class="form-label">ความสามารถพิเศษ / ทักษะเฉพาะทาง (เช่น ภาษา, โปรแกรม, การใช้งานเครื่องมือ)</label>
+                <textarea class="form-control" id="skills" name="skills" rows="3" placeholder="ระบุทักษะ เช่น: ภาษาอังกฤษดีเยี่ยม, สามารถใช้ Adobe Photoshop ได้, มีทักษะการเขียนโค้ด Python"></textarea>
+            </div>
+
+            <div class="mb-4">
+                <label for="experience" class="form-label">ประสบการณ์ทำงาน (สรุปโดยย่อ หรือ ระบุชื่อบริษัท/ตำแหน่งล่าสุด)</label>
+                <textarea class="form-control" id="experience" name="experience" rows="5" placeholder="ระบุประสบการณ์ทำงานที่เกี่ยวข้องกับตำแหน่งที่สมัคร"></textarea>
+            </div>
+
+            <hr class="my-4">
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <button type="submit" name="Submit" class="btn btn-submit btn-lg text-white">
+                    <i class="bi bi-send-fill"></i> ส่งใบสมัคร
+                </button>
+                <button type="reset" class="btn btn-reset btn-lg text-white">
+                    <i class="bi bi-x-circle-fill"></i> ล้างข้อมูล
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+</body>
+</html>
