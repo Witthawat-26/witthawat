@@ -28,7 +28,16 @@ include('../includes/db_connect.php');
             <tbody>
                 <?php
                 $sql = "SELECT * FROM progamer_sales";
-                $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+                // เปลี่ยนเป็นแบบนี้เพื่อเช็ค Error
+$result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    // หาก Query พัง จะแสดงข้อความ Error จาก Database ทันที
+    die("<div class='alert alert-danger'>SQL Error: " . mysqli_error($conn) . "</div>");
+}
+
+// ตรวจสอบจำนวนแถวที่ดึงมาได้
+echo "";
                 while($row = mysqli_fetch_assoc($result)) {
                     echo "<tr>
                         <td>{$row['product_name']}</td>

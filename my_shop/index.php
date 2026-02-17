@@ -108,7 +108,16 @@ $is_logged_in = isset($_SESSION['username']);
                 echo "<h3 class='mb-4 fw-bold border-bottom pb-2'>รายการสินค้าทั้งหมด</h3>";
             }
 
-            $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+            // เปลี่ยนเป็นแบบนี้เพื่อเช็ค Error
+$result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    // หาก Query พัง จะแสดงข้อความ Error จาก Database ทันที
+    die("<div class='alert alert-danger'>SQL Error: " . mysqli_error($conn) . "</div>");
+}
+
+// ตรวจสอบจำนวนแถวที่ดึงมาได้
+echo "";
             ?>
 
             <div class="row">
