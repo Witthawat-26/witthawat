@@ -1,6 +1,7 @@
 <?php 
 session_start();
 include('includes/db_connect.php'); 
+if (!$conn) { die("Connection failed: " . mysqli_connect_error()); }
 include('includes/header.php'); 
 
 if(empty($_SESSION['cart'])) {

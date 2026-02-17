@@ -2,6 +2,7 @@
 session_start();
 // 1. ต้อง include ไฟล์เชื่อมต่อฐานข้อมูลก่อนใช้งาน $conn
 include('includes/db_connect.php'); 
+if (!$conn) { die("Connection failed: " . mysqli_connect_error()); }
 
 // --- ส่วนประมวลผลการสมัครสมาชิก (คงไว้ตามเดิม) ---
 if(isset($_POST['register_now'])) {
