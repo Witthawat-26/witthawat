@@ -105,7 +105,7 @@ $is_logged_in = isset($_SESSION['username']);
                 echo "<h3 class='mb-4 fw-bold border-bottom pb-2'>รายการสินค้าทั้งหมด</h3>";
             }
 
-            $result = mysqli_query($conn, $sql);
+            $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
             ?>
 
             <div class="row">

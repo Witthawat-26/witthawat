@@ -28,7 +28,7 @@ include('../includes/db_connect.php');
             <tbody>
                 <?php
                 $sql = "SELECT * FROM progamer_sales";
-                $result = mysqli_query($conn, $sql);
+                $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
                 while($row = mysqli_fetch_assoc($result)) {
                     echo "<tr>
                         <td>{$row['product_name']}</td>
