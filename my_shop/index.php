@@ -1,11 +1,7 @@
 <?php 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 session_start();
 // 1. ต้อง include ไฟล์เชื่อมต่อฐานข้อมูลก่อนใช้งาน $conn
 include('includes/db_connect.php'); 
-if (!$conn) { die("Connection failed: " . mysqli_connect_error()); }
 
 // --- ส่วนประมวลผลการสมัครสมาชิก (คงไว้ตามเดิม) ---
 if(isset($_POST['register_now'])) {
@@ -108,16 +104,7 @@ $is_logged_in = isset($_SESSION['username']);
                 echo "<h3 class='mb-4 fw-bold border-bottom pb-2'>รายการสินค้าทั้งหมด</h3>";
             }
 
-            // เปลี่ยนเป็นแบบนี้เพื่อเช็ค Error
-$result = mysqli_query($conn, $sql);
-
-if (!$result) {
-    // หาก Query พัง จะแสดงข้อความ Error จาก Database ทันที
-    die("<div class='alert alert-danger'>SQL Error: " . mysqli_error($conn) . "</div>");
-}
-
-// ตรวจสอบจำนวนแถวที่ดึงมาได้
-echo "";
+            $result = mysqli_query($conn, $sql);
             ?>
 
             <div class="row">

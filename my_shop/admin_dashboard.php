@@ -1,7 +1,6 @@
 <?php 
 session_start();
 include('includes/db_connect.php'); 
-if (!$conn) { die("Connection failed: " . mysqli_connect_error()); }
 include('includes/header.php'); 
 
 // เช็คสิทธิ์แอดมิน (ใช้เงื่อนไขเดิมของคุณ)

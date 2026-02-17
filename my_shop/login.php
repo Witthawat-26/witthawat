@@ -4,7 +4,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 include('includes/db_connect.php'); 
-if (!$conn) { die("Connection failed: " . mysqli_connect_error()); }
 include('includes/header.php'); 
 
 // 2. ส่วนประมวลผลการเข้าสู่ระบบ

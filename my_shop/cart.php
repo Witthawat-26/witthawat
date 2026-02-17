@@ -1,7 +1,6 @@
 <?php 
 session_start(); // สำคัญมาก ห้ามลืม
 include('includes/db_connect.php'); 
-if (!$conn) { die("Connection failed: " . mysqli_connect_error()); }
 include('includes/header.php'); 
 
 // --- 1. ส่วนเพิ่มสินค้า (ที่มีอยู่แล้ว) ---

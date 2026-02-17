@@ -2,8 +2,8 @@
 // ตั้งค่าการเชื่อมต่อฐานข้อมูล
 $host = "localhost";
 $user = "root";
-$pass = "Zx.0966765968";
-$dbname = "4037db"; // ชื่อฐานข้อมูลที่คุณใช้งานอยู่
+$pass = "";
+$dbname = "4029db"; // ชื่อฐานข้อมูลที่คุณใช้งานอยู่
 
 // สร้างการเชื่อมต่อ
 $conn = mysqli_connect($host, $user, $pass, $dbname);

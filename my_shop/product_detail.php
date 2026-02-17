@@ -1,6 +1,5 @@
 <?php 
 include('includes/db_connect.php'); 
-if (!$conn) { die("Connection failed: " . mysqli_connect_error()); }
 include('includes/header.php'); 
 
 $id = $_GET['id']; // รับ ID สินค้าจาก URL
