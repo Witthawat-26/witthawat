@@ -1,4 +1,7 @@
 <?php 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 session_start();
 // 1. ต้อง include ไฟล์เชื่อมต่อฐานข้อมูลก่อนใช้งาน $conn
 include('includes/db_connect.php'); 
