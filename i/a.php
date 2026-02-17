@@ -10,7 +10,7 @@
 <form method="post" action="">
     ชื่อภาค<input type="text" name="rname"aotofocus requiewd>
     <button type="submit" name="Submit">บันทึก</button>
->/form><br><br>
+</form><br><br>
 
 <?phpif(isst($_POST['Submit'])){
     include_once("connectdb.php");
@@ -30,19 +30,21 @@
     </tr>
 <?php
 include_once("connectdb.php");
-$sql = "SELECT * FROM 'regions'";
-$rs = mysqli_qery($conn,$sql);
+$sql = "SELECT * FROM regions ";
+$rs = mysqli_query($conn,$sql);
 
 while($data = mysqli_fetch_array($rs)){
 ?>
     <tr>
         <td><?php echo $data['r_id'];?></td>
         <td><?php echo $data['r_name'];?></td>
-        <td width="80" align="ceter"> <img src="images/delete.jpg" width="20"></td>
-
+        <td width="80" align="ceter"><a href="delete_regions.php?id=<?php echo $data['r_id']; ?>"onClick="return confirm ('ยืนยันการลบ?');"> <img src="images/delete.jpg" width="20"></td>
     </tr>
-<?php} ?>
+<?php } ?>
 </table> 
 
 </body>
 </html>
+<?php 
+mysqli_close($conn)
+?>
