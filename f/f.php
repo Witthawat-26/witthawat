@@ -11,7 +11,7 @@
 <?php
 $i = 1;
 do{
-	echo "$i : จุฑาภรณ์ สมจันทร์ <br>";
+	echo "$i : วิทวัส วงศ์ภาคำ <br>";
 	echo"<img src ='2.jfif 'width='250'><hr>";
 	$i++;
 } while($i<=10);

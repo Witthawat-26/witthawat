@@ -17,9 +17,9 @@
 	echo "Mahasarakham University <br>";
 	print "Jutaporn Somjan <br>";
 	
-	$name= "จุฑาภรณ์ สมจันทร์";
+	$name= "วิทวัส วงศ์ภาคำ";
 	$age= 21;
-	$Name= "จุฑาภรณ์";
+	$Name= "วิทวัส";
 	
 	//echo gettype($age);
 	var_dump($age);

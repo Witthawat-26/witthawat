@@ -13,7 +13,7 @@
 <?php
 $i = 1;
 while ($i < 10) {
-	echo "$i : จุฑาภรณ์ สมจันทร์ (ฝน) <br>" ;
+	echo "$i : วิทวัส วงศ์ภาคำ (เกม) <br>" ;
 	echo "<img src='1.jfif ' width='200'><hr>";
 	$i++;
 }
