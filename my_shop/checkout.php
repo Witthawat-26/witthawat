@@ -47,7 +47,7 @@ if(isset($_POST['confirm_order'])) {
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">ชื่อ-นามสกุล ผู้รับ</label>
-                                <input type="text" name="customer_name" class="form-control" required placeholder="นาย สมชาย ใจดี">
+                                <input type="text" name="customer_name" class="form-control" required placeholder="นายเซียง มันตายแล้ว">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">เบอร์โทรศัพท์</label>
