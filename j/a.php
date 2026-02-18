@@ -7,6 +7,8 @@
 </head>
 <body>
     <h1>วิทวัส วงศ์ภาคำ (เกม)</h1>
+    img src=""
+    <td><img src="images/1.jpg" width="20"></td>
     
 </body>
 </html>
