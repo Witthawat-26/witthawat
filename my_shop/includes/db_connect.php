@@ -1,7 +1,7 @@
 <?php
 // ตั้งค่าการเชื่อมต่อฐานข้อมูล
 $host = "localhost";
-$user = "myadmin1";
+$user = "root";
 $pass = "zx123456";
 $dbname = "4029db"; // ชื่อฐานข้อมูลที่คุณใช้งานอยู่
 
