@@ -9,7 +9,7 @@
     <h1>วิทวัส วงศ์ภาคำ(เกม)</h1>
 
 <form method="post" action="">
-    ชื่อภาค<input type="text" name="rname"aotofocus requied>
+    ชื่อภาค<input type="text" name="rname"aotofocus required>
     <button type="submit" name="Submit">บันทึก</button>
 </form><br><br>
 
