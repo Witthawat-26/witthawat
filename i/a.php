@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>วิทวัส วงศ์ภาคำ(เกม)</h1>
-    
+
 <form method="post" action="">
     ชื่อภาค<input type="text" name="rname"aotofocus requied>
     <button type="submit" name="Submit">บันทึก</button>
@@ -40,7 +40,7 @@ while($data = mysqli_fetch_array($rs)){
     <tr>
         <td><?php echo $data['r_id'];?></td>
         <td><?php echo $data['r_name'];?></td>
-        <td width="80" align="ceter"><a href="delete_regions.php?id=<?php echo $data['r_id']; ?>"onClick="return confirm ('ยืนยันการลบ?');"> <img src="images/delete.jpg" width="20"></td>
+        <td width="80" align="center"><a href="delete_regions.php?id=<?php echo $data['r_id']; ?>"onClick="return confirm ('ยืนยันการลบ?');"> <img src="images/delete.jpg" width="20"></td>
     </tr>
 <?php } ?>
 </table> 
