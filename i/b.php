@@ -64,7 +64,7 @@ while ($data = mysqli_fetch_array($rs)) {
     <td><?php echo $data['p_name'] ?></td>
     <td><img src="images/<?php echo $data['p_id'] ?>.<?php echo $data['p_ext'] ?>" width="150" ></td>
     <td align="center"><a href="delete_province.php?id=<?php echo $data['p_id'] ?>&ext=<?php echo $data['p_ext'] ?>" 
-    onclick="return confirm('คุณต้องการลบข้อมูลนี้หรือไม่')"><img src="images/delete.png" width="25" height="25"></td>
+    onclick="return confirm('คุณต้องการลบข้อมูลนี้หรือไม่')"><img src="images/delete.jng" width="25" height="25"></td>
     </tr>
 <?php
 }
