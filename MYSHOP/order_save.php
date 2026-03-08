@@ -15,14 +15,14 @@ if (isset($_POST['shipping_address'])) {
         $total_price += ($p_data['p_price'] * $qty);
     }
 
-    // 2. บันทึกลงตาราง orders (ใช้ชื่อคอลัมน์ตามรูป image_803aff.png)
+    // 2. บันทึกลงตาราง orders (ใช้ชื่อคอลัมน์ตามรูปที่คุณส่งมา)
     $sql_order = "INSERT INTO orders (u_id, order_date, total_price, order_status, shipping_address) 
                   VALUES ('$u_id', '$order_date', '$total_price', 'pending', '$address')";
     
     if (mysqli_query($conn, $sql_order)) {
         $order_id = mysqli_insert_id($conn);
 
-        // 3. บันทึกลงตาราง order_details (ใช้ชื่อคอลัมน์ตามรูป image_802f46.png)
+        // 3. บันทึกลงตาราง order_details
         foreach ($_SESSION['cart'] as $p_id => $qty) {
             $p_query = mysqli_query($conn, "SELECT p_price FROM products WHERE p_id = '$p_id'");
             $p_data = mysqli_fetch_assoc($p_query);
@@ -36,8 +36,10 @@ if (isset($_POST['shipping_address'])) {
             mysqli_query($conn, "UPDATE products SET p_stock = p_stock - $qty WHERE p_id = '$p_id'");
         }
 
+        // 5. ล้างตะกร้าและไปหน้าชำระเงิน
         unset($_SESSION['cart']);
-        echo "<script>alert('สั่งซื้อสินค้าสำเร็จ!'); window.location.href='order_history.php';</script>";
+        // เปลี่ยนจาก order_history.php เป็น payment.php
+        echo "<script>alert('บันทึกคำสั่งซื้อแล้ว กรุณาชำระเงิน'); window.location.href='payment.php?order_id=$order_id';</script>";
     } else {
         echo "Error: " . mysqli_error($conn);
     }
