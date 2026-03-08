@@ -5,14 +5,20 @@ include('db_connect.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['slip_image'])) {
     $order_id = mysqli_real_escape_string($conn, $_POST['order_id']);
     
-    // อัปโหลดรูปสลิป
+    // 1. ตรวจสอบโฟลเดอร์ก่อน (Path ต้องตรงกับโครงสร้างในรูปของคุณ)
+    $upload_dir = "assets/images/";
+    
+    if (!is_dir($upload_dir)) {
+        die("Error: ไม่พบโฟลเดอร์ $upload_dir กรุณาสร้างโฟลเดอร์ก่อนครับ");
+    }
+
+    // 2. จัดการไฟล์รูป
     $ext = pathinfo($_FILES['slip_image']['name'], PATHINFO_EXTENSION);
     $new_name = "slip_" . $order_id . "_" . time() . "." . $ext;
-    $target = "assets/images/" . $new_name; // เก็บไว้ที่เดียวกับรูปสินค้าเพื่อให้ง่าย
+    $target = $upload_dir . $new_name;
 
     if (move_uploaded_file($_FILES['slip_image']['tmp_name'], $target)) {
-        // อัปเดตชื่อไฟล์สลิปและเปลี่ยนสถานะเป็น 'waiting_verification' (รอตรวจสอบ)
-        // หมายเหตุ: คุณต้องมีคอลัมน์ slip_image ในตาราง orders ตามโครงสร้างของคุณ
+        // 3. อัปเดต DB (หลังจากที่คุณเพิ่มคอลัมน์ slip_image ใน phpMyAdmin แล้ว)
         $sql = "UPDATE orders SET 
                 slip_image = '$new_name', 
                 order_status = 'waiting' 
@@ -24,7 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['slip_image'])) {
             echo "Error DB: " . mysqli_error($conn);
         }
     } else {
-        echo "Error: ไม่สามารถบันทึกไฟล์รูปภาพได้";
+        // แจ้ง Error ละเอียดขึ้นว่าทำไมย้ายไฟล์ไม่ได้
+        echo "Error: ไม่สามารถย้ายไฟล์ไปยัง $target ได้ (เช็ค Permission หรือ Path)";
     }
+} else {
+    header("Location: index.php");
 }
 ?>
