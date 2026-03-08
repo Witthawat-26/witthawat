@@ -9,35 +9,36 @@ if (isset($_POST['save_product'])) {
     $cat_id = $_POST['cat_id'];
     $p_detail = mysqli_real_escape_string($conn, $_POST['p_detail']);
 
-    // 1. ตรวจสอบว่ามีโฟลเดอร์ assets/images หรือยัง (ในระดับนอก admin)
-    $upload_dir = "../assets/images/";
-    
+    // 1. ใช้ __DIR__ เพื่อหาตำแหน่งที่แน่นอนของไฟล์นี้ แล้วถอยออกไปหา assets
+    // __DIR__ บน Windows จะได้ประมาณ C:\xampp\htdocs\MYSHOP\admin
+    $upload_dir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR;
+
+    // 2. ถ้าไม่มีโฟลเดอร์ ให้สร้างขึ้นมาเลย (รวมถึงโฟลเดอร์ย่อยด้วย)
     if (!is_dir($upload_dir)) {
-        // ถ้าไม่มีให้สร้างโฟลเดอร์ขึ้นมาเอง
         mkdir($upload_dir, 0777, true);
     }
 
-    // 2. ตรวจสอบว่ามีการเลือกรูปภาพมาจริงไหม
+    // 3. จัดการไฟล์ภาพ
     if ($_FILES['p_image']['name'] != "") {
         $ext = pathinfo(basename($_FILES['p_image']['name']), PATHINFO_EXTENSION);
         $new_image_name = 'img_' . uniqid() . '.' . $ext;
-        $image_path = $upload_dir . $new_image_name;
+        $target_path = $upload_dir . $new_image_name;
 
-        // 3. ย้ายไฟล์ไปยังโฟลเดอร์ที่กำหนด
-        if (move_uploaded_file($_FILES['p_image']['tmp_name'], $image_path)) {
+        // 4. ย้ายไฟล์
+        if (move_uploaded_file($_FILES['p_image']['tmp_name'], $target_path)) {
             
-            // 4. บันทึกลง Database
             $sql = "INSERT INTO products (p_name, p_price, p_stock, cat_id, p_detail, p_image) 
                     VALUES ('$p_name', '$p_price', '$p_stock', '$cat_id', '$p_detail', '$new_image_name')";
             
             if (mysqli_query($conn, $sql)) {
                 echo "<script>alert('เพิ่มสินค้าสำเร็จ!'); window.location.href='product_list.php';</script>";
             } else {
-                echo "Error: " . mysqli_error($conn);
+                echo "Error SQL: " . mysqli_error($conn);
             }
         } else {
-            // ถ้า Error ตรงนี้ แสดงว่า Path ../assets/images/ ผิด หรือหาโฟลเดอร์ไม่เจอ
-            die("เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ! กรุณาเช็คว่ามีโฟลเดอร์ assets/images อยู่จริงไหม");
+            // ถ้ายังไม่ได้อีก จะโชว์ Path ที่ PHP พยายามจะวางไฟล์ให้ดูครับ
+            echo "พยายามย้ายไปที่: " . $target_path . "<br>";
+            die("Error: ไม่สามารถบันทึกไฟล์รูปภาพได้ เช็คสิทธิ์โฟลเดอร์อีกครั้ง");
         }
     } else {
         echo "<script>alert('กรุณาเลือกรูปภาพ'); window.history.back();</script>";
