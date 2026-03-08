@@ -9,22 +9,21 @@ if (isset($_POST['save_product'])) {
     $cat_id = $_POST['cat_id'];
     $p_detail = mysqli_real_escape_string($conn, $_POST['p_detail']);
 
-    // 1. ใช้ __DIR__ เพื่อหาตำแหน่งที่แน่นอนของไฟล์นี้ แล้วถอยออกไปหา assets
-    // __DIR__ บน Windows จะได้ประมาณ C:\xampp\htdocs\MYSHOP\admin
-    $upload_dir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR;
-
-    // 2. ถ้าไม่มีโฟลเดอร์ ให้สร้างขึ้นมาเลย (รวมถึงโฟลเดอร์ย่อยด้วย)
-    if (!is_dir($upload_dir)) {
-        mkdir($upload_dir, 0777, true);
+    // 1. สร้าง Path แบบสมบูรณ์ (Absolute Path) สำหรับ Windows
+    // สิ่งนี้จะช่วยให้ PHP หาโฟลเดอร์ assets/images เจอแน่นอน
+    $base_dir = $_SERVER['DOCUMENT_ROOT'] . '/witthawat/MYSHOP/assets/images/';
+    
+    // 2. ตรวจสอบและสร้างโฟลเดอร์ถ้าไม่มี
+    if (!is_dir($base_dir)) {
+        mkdir($base_dir, 0777, true);
     }
 
-    // 3. จัดการไฟล์ภาพ
     if ($_FILES['p_image']['name'] != "") {
         $ext = pathinfo(basename($_FILES['p_image']['name']), PATHINFO_EXTENSION);
         $new_image_name = 'img_' . uniqid() . '.' . $ext;
-        $target_path = $upload_dir . $new_image_name;
+        $target_path = $base_dir . $new_image_name;
 
-        // 4. ย้ายไฟล์
+        // 3. ย้ายไฟล์
         if (move_uploaded_file($_FILES['p_image']['tmp_name'], $target_path)) {
             
             $sql = "INSERT INTO products (p_name, p_price, p_stock, cat_id, p_detail, p_image) 
@@ -36,9 +35,9 @@ if (isset($_POST['save_product'])) {
                 echo "Error SQL: " . mysqli_error($conn);
             }
         } else {
-            // ถ้ายังไม่ได้อีก จะโชว์ Path ที่ PHP พยายามจะวางไฟล์ให้ดูครับ
-            echo "พยายามย้ายไปที่: " . $target_path . "<br>";
-            die("Error: ไม่สามารถบันทึกไฟล์รูปภาพได้ เช็คสิทธิ์โฟลเดอร์อีกครั้ง");
+            // โชว์ Path ที่มันพยายามจะเขียน เพื่อให้คุณไปเช็คในเครื่องว่าโฟลเดอร์ตรงกันไหม
+            echo "พยายามบันทึกไปที่: " . $target_path . "<br>";
+            die("Error: ไม่สามารถบันทึกไฟล์รูปภาพได้ กรุณาเช็คชื่อโฟลเดอร์ assets/images");
         }
     } else {
         echo "<script>alert('กรุณาเลือกรูปภาพ'); window.history.back();</script>";
