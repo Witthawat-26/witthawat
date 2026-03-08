@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = ""; // ปกติ XAMPP จะไม่มีรหัสผ่าน ถ้ามีให้ใส่ที่นี่
+$password = "zx123456"; // ปกติ XAMPP จะไม่มีรหัสผ่าน ถ้ามีให้ใส่ที่นี่
 $dbname = "progamer_db";
 
 // สร้างการเชื่อมต่อ
