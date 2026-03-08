@@ -5,35 +5,34 @@ include('db_connect.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['slip_image'])) {
     $order_id = mysqli_real_escape_string($conn, $_POST['order_id']);
     
-    // 1. ตรวจสอบโฟลเดอร์ก่อน (Path ต้องตรงกับโครงสร้างในรูปของคุณ)
-    $upload_dir = "assets/images/";
+    // กำหนด Path โดยใช้ __DIR__ เพื่อความแม่นยำ
+    $upload_dir = __DIR__ . "/assets/images/";
     
+    // สร้างโฟลเดอร์อัตโนมัติถ้ายังไม่มี (กันพลาด)
     if (!is_dir($upload_dir)) {
-        die("Error: ไม่พบโฟลเดอร์ $upload_dir กรุณาสร้างโฟลเดอร์ก่อนครับ");
+        mkdir($upload_dir, 0777, true);
     }
 
-    // 2. จัดการไฟล์รูป
     $ext = pathinfo($_FILES['slip_image']['name'], PATHINFO_EXTENSION);
     $new_name = "slip_" . $order_id . "_" . time() . "." . $ext;
-    $target = $upload_dir . $new_name;
+    $target_file = $upload_dir . $new_name;
 
-    if (move_uploaded_file($_FILES['slip_image']['tmp_name'], $target)) {
-        // 3. อัปเดต DB (หลังจากที่คุณเพิ่มคอลัมน์ slip_image ใน phpMyAdmin แล้ว)
+    // ย้ายไฟล์
+    if (move_uploaded_file($_FILES['slip_image']['tmp_name'], $target_file)) {
+        // บันทึกชื่อไฟล์ลง DB (บันทึกแค่ชื่อไฟล์ ไม่ต้องมี Path เต็ม)
         $sql = "UPDATE orders SET 
                 slip_image = '$new_name', 
                 order_status = 'waiting' 
                 WHERE order_id = '$order_id'";
         
         if (mysqli_query($conn, $sql)) {
-            echo "<script>alert('อัปโหลดหลักฐานสำเร็จ! แอดมินจะรีบตรวจสอบออเดอร์ให้ครับ'); window.location.href='order_history.php';</script>";
+            echo "<script>alert('อัปโหลดหลักฐานสำเร็จ!'); window.location.href='order_history.php';</script>";
         } else {
             echo "Error DB: " . mysqli_error($conn);
         }
     } else {
-        // แจ้ง Error ละเอียดขึ้นว่าทำไมย้ายไฟล์ไม่ได้
-        echo "Error: ไม่สามารถย้ายไฟล์ไปยัง $target ได้ (เช็ค Permission หรือ Path)";
+        // ถ้ายังไม่ได้อีก จะโชว์ว่าพยายามจะย้ายไปที่ไหน
+        echo "Error: ไม่สามารถย้ายไฟล์ไปที่: " . $target_file;
     }
-} else {
-    header("Location: index.php");
 }
 ?>
