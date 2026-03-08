@@ -2,6 +2,7 @@
 session_start();
 include('db_connect.php');
 
+// ตรวจสอบว่ามี order_id ส่งมาไหม
 if(!isset($_GET['order_id'])) { header("Location: index.php"); exit(); }
 
 $order_id = mysqli_real_escape_string($conn, $_GET['order_id']);
@@ -20,38 +21,34 @@ $order = mysqli_fetch_assoc($res);
 </head>
 <body class="bg-[#0b0e14] text-white flex items-center justify-center min-h-screen p-4">
 
-    <div class="max-w-md w-full bg-slate-900 rounded-[2rem] border border-slate-800 p-8 shadow-2xl">
-        <div class="text-center">
+    <div class="max-w-md w-full bg-slate-900 rounded-[2rem] border border-slate-800 p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-600/10 rounded-full blur-3xl"></div>
+        
+        <div class="text-center relative z-10">
             <h2 class="text-2xl font-black italic text-blue-500 mb-1">PRO<span class="text-white">PAYMENT</span></h2>
             <p class="text-slate-500 text-xs uppercase tracking-widest mb-6">Order ID: #<?php echo $order_id; ?></p>
 
             <div class="bg-white p-6 rounded-3xl mb-6 inline-block shadow-inner">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=PROGAMER-PAY-<?php echo $order['total_price']; ?>" class="w-56 h-56">
-                <div class="mt-4 flex items-center justify-center">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/PromptPay-logo.png" class="h-6">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=PAY-TO-PROGAMER-<?php echo $order['total_price']; ?>" 
+                     alt="PromptPay QR Code" class="w-56 h-56">
+                <div class="mt-4 flex items-center justify-center space-x-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/PromptPay-logo.png" class="h-6" alt="PromptPay">
                 </div>
             </div>
 
-            <div class="bg-slate-800/50 rounded-2xl p-4 mb-8 text-center">
-                <p class="text-slate-400 text-[10px] uppercase font-bold">ยอดชำระสุทธิ</p>
+            <div class="bg-slate-800/50 rounded-2xl p-4 mb-8">
+                <p class="text-slate-400 text-[10px] uppercase font-bold mb-1">ยอดชำระที่ต้องโอน</p>
                 <p class="text-4xl font-black text-white italic">฿<?php echo number_format($order['total_price'], 2); ?></p>
             </div>
 
-            <form action="payment_db.php" method="POST" enctype="multipart/form-data" class="space-y-5">
-                <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
-                
-                <div class="text-left">
-                    <label class="block text-slate-400 text-[10px] uppercase font-bold mb-2 ml-1">อัปโหลดสลิปการโอนเงิน</label>
-                    <input type="file" name="slip_image" required accept="image/*"
-                           class="w-full bg-slate-800 border border-slate-700 text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer p-2 rounded-xl">
-                </div>
-
-                <button type="submit" class="w-full bg-green-600 hover:bg-green-500 py-4 rounded-xl font-bold transition-all shadow-lg shadow-green-900/20 active:scale-95">
-                    <i class="fas fa-paper-plane mr-2"></i> ยืนยันการชำระเงิน
-                </button>
-            </form>
-            
-            <a href="order_history.php" class="block mt-4 text-xs text-slate-500 hover:text-white transition">ไว้แจ้งภายหลัง</a>
+            <div class="space-y-3">
+                <a href="order_history.php" class="block w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-bold transition-all transform active:scale-95 shadow-lg shadow-blue-900/20">
+                    <i class="fas fa-check-circle mr-2"></i> ฉันโอนเงินแล้ว
+                </a>
+                <p class="text-[10px] text-slate-500 leading-relaxed px-4">
+                    * กรุณาเก็บหลักฐานการโอนเงินไว้เพื่อแจ้งแอดมินในกรณีที่สถานะไม่อัปเดต
+                </p>
+            </div>
         </div>
     </div>
 
