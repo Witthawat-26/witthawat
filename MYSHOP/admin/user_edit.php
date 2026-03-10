@@ -15,34 +15,40 @@ if (!isset($_GET['id'])) {
 }
 $u_id = mysqli_real_escape_string($conn, $_GET['id']);
 
-// 3. ส่วนของการอัปเดตข้อมูล (เมื่อกดบันทึก)
+// 3. ส่วนของการอัปเดตข้อมูล
 if (isset($_POST['update_user'])) {
     $fullname = mysqli_real_escape_string($conn, $_POST['u_fullname']);
     $email = mysqli_real_escape_string($conn, $_POST['u_email']);
     $role = mysqli_real_escape_string($conn, $_POST['u_role']);
     $new_password = $_POST['new_password'];
 
-    // เริ่มสร้างคำสั่ง SQL
+    // สร้างคำสั่ง SQL ตามโครงสร้างตารางที่คุณส่งมา (u_fullname, u_email, u_role)
     $sql_update = "UPDATE users SET u_fullname='$fullname', u_email='$email', u_role='$role'";
 
-    // ถ้ามีการกรอกรหัสผ่านใหม่เข้ามา ให้เพิ่มการอัปเดต Password ด้วย
     if (!empty($new_password)) {
-        // แนะนำให้ใช้ password_hash เพื่อความปลอดภัย แต่ถ้าโค้ดเดิมคุณใช้ MD5 หรือ Plain text ให้ปรับตามระบบเดิมนะครับ
-        // ในที่นี้สมมติว่าเป็นข้อความธรรมดาตามโครงสร้างที่คุณอาจจะทำไว้เบื้องต้น
+        // อัปเดต password ด้วยหากมีการกรอกมา
         $sql_update .= ", u_password='$new_password'";
     }
 
     $sql_update .= " WHERE u_id='$u_id'";
 
     if (mysqli_query($conn, $sql_update)) {
-        echo "<script>alert('อัปเดตข้อมูลเรียบร้อยแล้ว'); window.location.href='user_list.php';</script>";
-        exit();
+        // เช็คว่ามีการเปลี่ยนแปลงในฐานข้อมูลจริงๆ หรือไม่
+        if (mysqli_affected_rows($conn) > 0) {
+            echo "<script>alert('อัปเดตข้อมูลเรียบร้อยแล้ว'); window.location.href='user_list.php';</script>";
+            exit();
+        } else {
+            // กรณีนี้คือ SQL ถูกต้อง แต่ค่าที่ส่งไป "เหมือนเดิมเป๊ะ" กับที่มีอยู่แล้ว ฐานข้อมูลจึงไม่บันทึกซ้ำ
+            echo "<script>alert('ไม่มีการเปลี่ยนแปลงข้อมูล (ข้อมูลใหม่เหมือนข้อมูลเดิม)'); window.location.href='user_list.php';</script>";
+            exit();
+        }
     } else {
-        echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
+        // หาก SQL มีปัญหาจะแจ้งที่นี่
+        die("MySQL Error: " . mysqli_error($conn) . " | Query: " . $sql_update);
     }
 }
 
-// 4. ดึงข้อมูลเดิมมาแสดงในฟอร์ม
+// 4. ดึงข้อมูลเดิมมาแสดง
 $res = mysqli_query($conn, "SELECT * FROM users WHERE u_id = '$u_id'");
 $user_data = mysqli_fetch_assoc($res);
 
@@ -70,7 +76,7 @@ if (!$user_data) {
         <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl">
             <h2 class="text-2xl font-black italic text-blue-500 uppercase mb-8">Edit <span class="text-white">User Info</span></h2>
 
-            <form method="POST" class="space-y-6">
+            <form action="user_edit.php?id=<?php echo $u_id; ?>" method="POST" class="space-y-6">
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Username (เปลี่ยนไม่ได้)</label>
                     <input type="text" value="<?php echo $user_data['u_username']; ?>" disabled 
@@ -86,8 +92,8 @@ if (!$user_data) {
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2">ระดับสิทธิ์ (Role)</label>
                         <select name="u_role" class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 outline-none focus:border-blue-500 transition cursor-pointer">
-                            <option value="user" <?php if($user_data['u_role'] == 'user') echo 'selected'; ?>>User (ลูกค้าทั่วไป)</option>
-                            <option value="admin" <?php if($user_data['u_role'] == 'admin') echo 'selected'; ?>>Admin (ผู้ดูแลระบบ)</option>
+                            <option value="user" <?php echo ($user_data['u_role'] == 'user') ? 'selected' : ''; ?>>User (ลูกค้าทั่วไป)</option>
+                            <option value="admin" <?php echo ($user_data['u_role'] == 'admin') ? 'selected' : ''; ?>>Admin (ผู้ดูแลระบบ)</option>
                         </select>
                     </div>
                 </div>
@@ -120,6 +126,5 @@ if (!$user_data) {
             </form>
         </div>
     </div>
-
 </body>
 </html>
