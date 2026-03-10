@@ -34,8 +34,7 @@ $result = mysqli_query($conn, $sql);
                 <?php while($order = mysqli_fetch_assoc($result)): 
                     $order_id = $order['order_id'];
                     
-                    // --- ส่วนที่เพิ่มเข้ามา: ดึงข้อมูลสินค้าในออเดอร์นี้ ---
-                    // สมมติว่าตารางเก็บรายละเอียดชื่อ order_details และเชื่อมกับ products ด้วย p_id
+                    // ดึงข้อมูลสินค้าโดยใช้ชื่อคอลัมน์ p_image ตามใน Database
                     $items_sql = "SELECT od.*, p.p_name, p.p_image 
                                   FROM order_details od 
                                   JOIN products p ON od.p_id = p.p_id 
@@ -56,9 +55,20 @@ $result = mysqli_query($conn, $sql);
                     </div>
 
                     <div class="p-6 space-y-4">
-                        <?php while($item = mysqli_fetch_assoc($items_result)): ?>
+                        <?php while($item = mysqli_fetch_assoc($items_result)): 
+                            // แก้ไข Path เป็น assets/images/
+                            $img_name = $item['p_image'];
+                            $img_path = "assets/images/" . $img_name;
+                            
+                            // ตรวจสอบว่ามีไฟล์อยู่จริงหรือไม่
+                            if (!empty($img_name) && file_exists($img_path)) {
+                                $display_img = $img_path;
+                            } else {
+                                $display_img = "https://via.placeholder.com/150?text=No+Image";
+                            }
+                        ?>
                         <div class="flex items-center gap-4 bg-slate-800/30 p-3 rounded-2xl border border-slate-800/50">
-                            <img src="uploads/<?php echo $item['p_image']; ?>" 
+                            <img src="<?php echo $display_img; ?>" 
                                  alt="<?php echo $item['p_name']; ?>" 
                                  class="w-16 h-16 object-cover rounded-xl shadow-md bg-slate-700">
                             
