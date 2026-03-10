@@ -34,8 +34,8 @@ $result = mysqli_query($conn, $sql);
                 <?php while($order = mysqli_fetch_assoc($result)): 
                     $order_id = $order['order_id'];
                     
-                    // แก้ไข SQL: ใช้ Alias 'item_total' เพื่อป้องกันชื่อคอลัมน์ซ้ำกับตาราง orders
-                    $items_sql = "SELECT od.total_price AS item_total, od.quantity, p.p_name, p.p_image 
+                    // ดึงข้อมูลสินค้าโดยใช้ชื่อคอลัมน์ p_image ตามใน Database
+                    $items_sql = "SELECT od.*, p.p_name, p.p_image 
                                   FROM order_details od 
                                   JOIN products p ON od.p_id = p.p_id 
                                   WHERE od.order_id = '$order_id'";
@@ -56,9 +56,11 @@ $result = mysqli_query($conn, $sql);
 
                     <div class="p-6 space-y-4">
                         <?php while($item = mysqli_fetch_assoc($items_result)): 
+                            // แก้ไข Path เป็น assets/images/
                             $img_name = $item['p_image'];
                             $img_path = "assets/images/" . $img_name;
                             
+                            // ตรวจสอบว่ามีไฟล์อยู่จริงหรือไม่
                             if (!empty($img_name) && file_exists($img_path)) {
                                 $display_img = $img_path;
                             } else {
@@ -76,7 +78,7 @@ $result = mysqli_query($conn, $sql);
                             </div>
                             
                             <div class="text-right">
-                                <p class="text-sm font-bold text-white">฿<?php echo number_format($item['item_total']); ?></p>
+                                <p class="text-sm font-bold text-white">฿<?php echo number_format($item['price']); ?></p>
                             </div>
                         </div>
                         <?php endwhile; ?>
