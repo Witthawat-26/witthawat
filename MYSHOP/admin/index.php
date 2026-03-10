@@ -92,10 +92,18 @@ $result = mysqli_query($conn, $sql);
                             <td class="px-6 py-4 text-sm text-slate-400"><?php echo date('d/m/Y H:i', strtotime($row['order_date'])); ?></td>
                             <td class="px-6 py-4 text-blue-500 font-black">฿<?php echo number_format($row['total_price']); ?></td>
                             <td class="px-6 py-4">
-                                <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase 
-                                    <?php echo ($row['order_status'] == 'pending') ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' : 'bg-green-500/10 text-green-500 border border-green-500/20'; ?>">
-                                    <?php echo ($row['order_status'] == 'pending') ? 'รอดำเนินการ' : 'จัดส่งแล้ว'; ?>
-                                </span>
+                                <?php 
+                                    // ปรับปรุงการเช็คสถานะให้แม่นยำขึ้น
+                                    $status = $row['order_status'];
+                                    if($status == 'pending') {
+                                        echo '<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">รอดำเนินการ</span>';
+                                    } elseif($status == 'shipped') {
+                                        echo '<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-green-500/10 text-green-500 border border-green-500/20">จัดส่งแล้ว</span>';
+                                    } else {
+                                        // ถ้าเป็นสถานะอื่น หรือค่าว่าง ให้โชว์ค่าจริงจาก DB เพื่อการตรวจสอบ (Debug)
+                                        echo '<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-slate-800 text-slate-400 border border-slate-700">' . ($status ? $status : "No Status") . '</span>';
+                                    }
+                                ?>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <a href="order_view.php?id=<?php echo $row['order_id']; ?>" class="inline-flex items-center bg-slate-800 hover:bg-blue-600 border border-slate-700 px-4 py-2 rounded-lg text-xs transition">
