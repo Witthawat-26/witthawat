@@ -58,7 +58,7 @@ $result = mysqli_query($conn, $sql);
                     <div class="p-6 space-y-4">
                         <?php while($item = mysqli_fetch_assoc($items_result)): ?>
                         <div class="flex items-center gap-4 bg-slate-800/30 p-3 rounded-2xl border border-slate-800/50">
-                            <img src="uploads/<?php echo $item['p_img']; ?>" 
+                            <img src="uploads/<?php echo $item['p_image']; ?>" 
                                  alt="<?php echo $item['p_name']; ?>" 
                                  class="w-16 h-16 object-cover rounded-xl shadow-md bg-slate-700">
                             
