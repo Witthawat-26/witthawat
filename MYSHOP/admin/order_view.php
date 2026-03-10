@@ -8,6 +8,48 @@ if (!isset($_SESSION['u_role']) || $_SESSION['u_role'] != 'admin') {
     exit();
 }
 
+// 2. รับค่า ID จาก URL ให้ได้ก่อน
+if (!isset($_GET['id'])) {
+    header("Location: index.php");
+    exit();
+}
+$order_id = mysqli_real_escape_string($conn, $_GET['id']);
+
+// 3. ส่วนของการอัปเดต (เมื่อมีการกดปุ่มอัปเดต)
+if (isset($_POST['update_status'])) {
+    // ดึงค่าจากฟอร์ม
+    $new_status = mysqli_real_escape_string($conn, $_POST['status']);
+    // บังคับใช้ $order_id จาก URL มาทำการอัปเดต
+    $sql_update = "UPDATE orders SET order_status = '$new_status' WHERE order_id = '$order_id'";
+    
+    if (mysqli_query($conn, $sql_update)) {
+        // อัปเดตเสร็จแล้ว ให้เด้งไปหน้า index.php ทันทีเพื่อดูผลลัพธ์
+        echo "<script>
+                alert('อัปเดตเป็น: " . $new_status . " เรียบร้อยแล้ว!');
+                window.location.href='index.php';
+              </script>";
+        exit();
+    } else {
+        echo "Error: " . mysqli_error($conn);
+        exit();
+    }
+}
+
+// 4. ดึงข้อมูลมาแสดงผลปกติ
+$order_query = mysqli_query($conn, "SELECT o.*, u.u_fullname, u.u_email FROM orders o JOIN users u ON o.u_id = u.u_id WHERE o.order_id = '$order_id'");
+$order = mysqli_fetch_assoc($order_query);
+$details_query = mysqli_query($conn, "SELECT od.*, p.p_name FROM order_details od JOIN products p ON od.p_id = p.p_id WHERE od.order_id = '$order_id'");
+?>
+<?php
+session_start();
+include('../db_connect.php');
+
+// 1. เช็คสิทธิ์ Admin
+if (!isset($_SESSION['u_role']) || $_SESSION['u_role'] != 'admin') {
+    header("Location: ../index.php");
+    exit();
+}
+
 // 2. รับค่า ID (ลองรับทั้งจาก GET และ POST เพื่อกันพลาด)
 $order_id = isset($_GET['id']) ? mysqli_real_escape_string($conn, $_GET['id']) : (isset($_POST['order_id_hidden']) ? mysqli_real_escape_string($conn, $_POST['order_id_hidden']) : '');
 
