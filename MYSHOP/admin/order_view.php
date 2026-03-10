@@ -2,32 +2,45 @@
 session_start();
 include('../db_connect.php');
 
-// เช็คสิทธิ์ Admin
+// 1. เช็คสิทธิ์ Admin
 if (!isset($_SESSION['u_role']) || $_SESSION['u_role'] != 'admin') {
     header("Location: ../index.php");
     exit();
 }
 
+// 2. รับค่า ID จาก URL (GET)
+if (!isset($_GET['id'])) {
+    header("Location: index.php");
+    exit();
+}
 $order_id = mysqli_real_escape_string($conn, $_GET['id']);
 
-// --- ส่วนของการอัปเดตสถานะ (แก้ไขจุดนี้) ---
+// 3. --- ส่วนของการอัปเดตสถานะ --- 
 if (isset($_POST['update_status'])) {
+    // รับค่า ID จากฟอร์ม (POST) เพื่อความแน่นอน
+    $post_order_id = mysqli_real_escape_string($conn, $_POST['order_id_hidden']);
     $new_status = mysqli_real_escape_string($conn, $_POST['status']);
-    $sql_update = "UPDATE orders SET order_status = '$new_status' WHERE order_id = '$order_id'";
+    
+    $sql_update = "UPDATE orders SET order_status = '$new_status' WHERE order_id = '$post_order_id'";
     
     if (mysqli_query($conn, $sql_update)) {
-        echo "<script>alert('อัปเดตสถานะสำเร็จ!'); window.location.href='index.php';</script>";
+        echo "<script>alert('อัปเดตสถานะเป็น " . ($new_status == 'shipped' ? 'จัดส่งแล้ว' : 'รอดำเนินการ') . " สำเร็จ!'); window.location.href='index.php';</script>";
         exit();
     } else {
-        echo "<script>alert('เกิดข้อผิดพลาด: " . mysqli_error($conn) . "');</script>";
+        // ถ้าไม่สำเร็จ ให้แสดง Error ของ MySQL ออกมาเลย
+        echo "<script>alert('เกิดข้อผิดพลาด SQL: " . mysqli_error($conn) . "');</script>";
     }
 }
 
-// ดึงข้อมูลออเดอร์ + ข้อมูลลูกค้า
+// 4. ดึงข้อมูลมาแสดงผล (ทำหลังจาก Update เพื่อให้ข้อมูลหน้าเว็บเป็นปัจจุบัน)
 $order_query = mysqli_query($conn, "SELECT o.*, u.u_fullname, u.u_email FROM orders o JOIN users u ON o.u_id = u.u_id WHERE o.order_id = '$order_id'");
 $order = mysqli_fetch_assoc($order_query);
 
-// ดึงรายการสินค้าในออเดอร์
+if (!$order) {
+    echo "ไม่พบข้อมูลออเดอร์นี้";
+    exit();
+}
+
 $details_query = mysqli_query($conn, "SELECT od.*, p.p_name FROM order_details od JOIN products p ON od.p_id = p.p_id WHERE od.order_id = '$order_id'");
 ?>
 
@@ -52,9 +65,11 @@ $details_query = mysqli_query($conn, "SELECT od.*, p.p_name FROM order_details o
             </div>
 
             <form method="POST" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl">
+                <input type="hidden" name="order_id_hidden" value="<?php echo $order_id; ?>">
+                
                 <label class="block text-xs font-bold text-slate-500 uppercase mb-3">สถานะคำสั่งซื้อ</label>
                 <div class="flex gap-3">
-                    <select name="status" class="bg-slate-800 border border-slate-700 text-sm rounded-xl px-4 py-2 outline-none focus:border-blue-500">
+                    <select name="status" class="bg-slate-800 border border-slate-700 text-sm rounded-xl px-4 py-2 outline-none focus:border-blue-500 text-white">
                         <option value="pending" <?php if($order['order_status'] == 'pending') echo 'selected'; ?>>รอดำเนินการ (Pending)</option>
                         <option value="shipped" <?php if($order['order_status'] == 'shipped') echo 'selected'; ?>>จัดส่งแล้ว (Shipped)</option>
                     </select>
