@@ -22,28 +22,27 @@ if (isset($_POST['update_user'])) {
     $role = mysqli_real_escape_string($conn, $_POST['u_role']);
     $new_password = $_POST['new_password'];
 
-    // สร้างคำสั่ง SQL ตามโครงสร้างตารางที่คุณส่งมา (u_fullname, u_email, u_role)
+    // เริ่มสร้างคำสั่ง SQL
     $sql_update = "UPDATE users SET u_fullname='$fullname', u_email='$email', u_role='$role'";
 
     if (!empty($new_password)) {
-        // อัปเดต password ด้วยหากมีการกรอกมา
-        $sql_update .= ", u_password='$new_password'";
+        // แก้ไข: ใช้ password_hash ให้ตรงกับหน้าสมัครสมาชิก (register_db.php)
+        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+        $sql_update .= ", u_password='$hashed_password'";
     }
 
     $sql_update .= " WHERE u_id='$u_id'";
 
     if (mysqli_query($conn, $sql_update)) {
-        // เช็คว่ามีการเปลี่ยนแปลงในฐานข้อมูลจริงๆ หรือไม่
+        // เช็คว่ามีการเปลี่ยนแปลงจริงหรือไม่
         if (mysqli_affected_rows($conn) > 0) {
             echo "<script>alert('อัปเดตข้อมูลเรียบร้อยแล้ว'); window.location.href='user_list.php';</script>";
             exit();
         } else {
-            // กรณีนี้คือ SQL ถูกต้อง แต่ค่าที่ส่งไป "เหมือนเดิมเป๊ะ" กับที่มีอยู่แล้ว ฐานข้อมูลจึงไม่บันทึกซ้ำ
             echo "<script>alert('ไม่มีการเปลี่ยนแปลงข้อมูล (ข้อมูลใหม่เหมือนข้อมูลเดิม)'); window.location.href='user_list.php';</script>";
             exit();
         }
     } else {
-        // หาก SQL มีปัญหาจะแจ้งที่นี่
         die("MySQL Error: " . mysqli_error($conn) . " | Query: " . $sql_update);
     }
 }
@@ -92,7 +91,7 @@ if (!$user_data) {
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-2">ระดับสิทธิ์ (Role)</label>
                         <select name="u_role" class="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-3 outline-none focus:border-blue-500 transition cursor-pointer">
-                            <option value="user" <?php echo ($user_data['u_role'] == 'user') ? 'selected' : ''; ?>>User (ลูกค้าทั่วไป)</option>
+                            <option value="customer" <?php echo ($user_data['u_role'] == 'customer') ? 'selected' : ''; ?>>Customer (ลูกค้าทั่วไป)</option>
                             <option value="admin" <?php echo ($user_data['u_role'] == 'admin') ? 'selected' : ''; ?>>Admin (ผู้ดูแลระบบ)</option>
                         </select>
                     </div>
