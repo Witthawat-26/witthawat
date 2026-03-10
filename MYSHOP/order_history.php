@@ -36,7 +36,7 @@ $result = mysqli_query($conn, $sql);
                     
                     // --- ส่วนที่เพิ่มเข้ามา: ดึงข้อมูลสินค้าในออเดอร์นี้ ---
                     // สมมติว่าตารางเก็บรายละเอียดชื่อ order_details และเชื่อมกับ products ด้วย p_id
-                    $items_sql = "SELECT od.*, p.p_name, p.p_img 
+                    $items_sql = "SELECT od.*, p.p_name, p.p_image 
                                   FROM order_details od 
                                   JOIN products p ON od.p_id = p.p_id 
                                   WHERE od.order_id = '$order_id'";
