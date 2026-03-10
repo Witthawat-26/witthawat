@@ -24,14 +24,29 @@ $result = mysqli_query($conn, $sql);
 </head>
 <body class="bg-[#0b0e14] text-white p-8">
     <div class="max-w-6xl mx-auto">
-        <div class="flex justify-between items-center mb-10">
-            <h1 class="text-3xl font-black italic text-blue-500">PRODUCT <span class="text-white">LIST</span></h1>
-            <a href="product_add.php" class="bg-blue-600 hover:bg-blue-500 px-6 py-2 rounded-xl transition font-bold">+ เพิ่มสินค้าใหม่</a>
+        
+        <div class="mb-6">
+            <a href="index.php" class="text-slate-500 hover:text-white transition flex items-center w-fit">
+                <i class="fas fa-arrow-left mr-2"></i> กลับหน้าจัดการออเดอร์
+            </a>
         </div>
 
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden">
+        <div class="flex justify-between items-center mb-10">
+            <h1 class="text-3xl font-black italic text-blue-500 uppercase">Product <span class="text-white">List</span></h1>
+            
+            <div class="flex space-x-3">
+                <a href="category.php" class="bg-slate-800 border border-slate-700 hover:bg-slate-700 px-5 py-2.5 rounded-xl text-sm font-bold transition">
+                    <i class="fas fa-tags mr-2 text-blue-500"></i> จัดการประเภท
+                </a>
+                <a href="product_add.php" class="bg-green-600 hover:bg-green-500 px-6 py-2.5 rounded-xl transition font-bold shadow-lg shadow-green-900/20">
+                    <i class="fas fa-plus mr-2"></i> เพิ่มสินค้าใหม่
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
             <table class="w-full text-left border-collapse">
-                <thead class="bg-slate-800/50 text-slate-400 text-sm uppercase">
+                <thead class="bg-slate-800/50 text-slate-400 text-sm uppercase tracking-widest">
                     <tr>
                         <th class="px-6 py-4">รูปภาพ</th>
                         <th class="px-6 py-4">ชื่อสินค้า / หมวดหมู่</th>
@@ -44,25 +59,27 @@ $result = mysqli_query($conn, $sql);
                     <?php while($row = mysqli_fetch_assoc($result)): ?>
                     <tr class="hover:bg-slate-800/30 transition">
                         <td class="px-6 py-4">
-                            <img src="../assets/images/<?php echo $row['p_image']; ?>" class="w-12 h-12 object-contain bg-slate-800 rounded-lg">
+                            <img src="../assets/images/<?php echo $row['p_image']; ?>" class="w-12 h-12 object-contain bg-slate-800 rounded-lg shadow-inner">
                         </td>
                         <td class="px-6 py-4">
-                            <div class="font-bold"><?php echo $row['p_name']; ?></div>
-                            <div class="text-[10px] text-blue-500 uppercase"><?php echo $row['cat_name']; ?></div>
+                            <div class="font-bold text-slate-200"><?php echo $row['p_name']; ?></div>
+                            <div class="text-[10px] text-blue-500 uppercase font-bold tracking-tighter"><?php echo $row['cat_name']; ?></div>
                         </td>
-                        <td class="px-6 py-4 font-mono text-blue-400">฿<?php echo number_format($row['p_price']); ?></td>
+                        <td class="px-6 py-4 font-mono text-blue-400 font-bold">฿<?php echo number_format($row['p_price']); ?></td>
                         <td class="px-6 py-4">
-                            <span class="<?php echo ($row['p_stock'] <= 5) ? 'text-red-500 font-bold' : 'text-slate-300'; ?>">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold <?php echo ($row['p_stock'] <= 5) ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 'bg-slate-800 text-slate-300'; ?>">
                                 <?php echo $row['p_stock']; ?> ชิ้น
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-center space-x-2">
-                            <a href="product_edit.php?id=<?php echo $row['p_id']; ?>" class="inline-block bg-yellow-600/20 text-yellow-500 hover:bg-yellow-600 hover:text-white p-2 rounded-lg transition">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a href="product_delete.php?id=<?php echo $row['p_id']; ?>" class="inline-block bg-red-600/20 text-red-500 hover:bg-red-600 hover:text-white p-2 rounded-lg transition" onclick="return confirm('ยืนยันการลบสินค้าหรือไม่?')">
-                                <i class="fas fa-trash"></i>
-                            </a>
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex justify-center space-x-2">
+                                <a href="product_edit.php?id=<?php echo $row['p_id']; ?>" class="bg-blue-600/10 text-blue-500 hover:bg-blue-600 hover:text-white w-9 h-9 flex items-center justify-center rounded-lg transition">
+                                    <i class="fas fa-edit text-sm"></i>
+                                </a>
+                                <a href="product_delete.php?id=<?php echo $row['p_id']; ?>" class="bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white w-9 h-9 flex items-center justify-center rounded-lg transition" onclick="return confirm('ยืนยันการลบสินค้าหรือไม่?')">
+                                    <i class="fas fa-trash text-sm"></i>
+                                </a>
+                            </div>
                         </td>
                     </tr>
                     <?php endwhile; ?>
