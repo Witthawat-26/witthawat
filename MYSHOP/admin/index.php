@@ -38,6 +38,9 @@ $result = mysqli_query($conn, $sql);
                         <a href="product_list.php" class="text-slate-400 hover:text-white hover:bg-slate-800 px-4 py-2 rounded-lg text-sm font-medium flex items-center transition">
                             <i class="fas fa-boxes mr-2"></i> จัดการสินค้า
                         </a>
+                        <a href="category.php" class="text-slate-400 hover:text-white hover:bg-slate-800 px-4 py-2 rounded-lg text-sm font-medium flex items-center transition">
+                            <i class="fas fa-tags mr-2"></i> จัดการประเภทสินค้า
+                        </a>
                     </div>
                 </div>
 
@@ -57,9 +60,15 @@ $result = mysqli_query($conn, $sql);
     <div class="max-w-6xl mx-auto px-4 pb-10">
         <div class="flex justify-between items-center mb-10">
             <h2 class="text-3xl font-black italic text-blue-500 uppercase">Order <span class="text-white">Management</span></h2>
-            <a href="product_add.php" class="bg-green-600 hover:bg-green-500 px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-lg shadow-green-900/20">
-                <i class="fas fa-plus mr-2"></i> เพิ่มสินค้าใหม่
-            </a>
+            
+            <div class="flex space-x-3">
+                <a href="category.php" class="bg-slate-800 border border-slate-700 hover:bg-slate-700 px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-lg">
+                    <i class="fas fa-tags mr-2 text-blue-500"></i> จัดการประเภทสินค้า
+                </a>
+                <a href="product_add.php" class="bg-green-600 hover:bg-green-500 px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-lg shadow-green-900/20">
+                    <i class="fas fa-plus mr-2"></i> เพิ่มสินค้าใหม่
+                </a>
+            </div>
         </div>
 
         <div class="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
