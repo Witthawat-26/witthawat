@@ -34,8 +34,8 @@ $result = mysqli_query($conn, $sql);
                 <?php while($order = mysqli_fetch_assoc($result)): 
                     $order_id = $order['order_id'];
                     
-                    // แก้ไข SQL: ดึง od.total_price มาแสดงเป็นราคาต่อรายการ
-                    $items_sql = "SELECT od.*, p.p_name, p.p_image 
+                    // แก้ไข SQL: ใช้ Alias 'item_total' เพื่อป้องกันชื่อคอลัมน์ซ้ำกับตาราง orders
+                    $items_sql = "SELECT od.total_price AS item_total, od.quantity, p.p_name, p.p_image 
                                   FROM order_details od 
                                   JOIN products p ON od.p_id = p.p_id 
                                   WHERE od.order_id = '$order_id'";
@@ -76,7 +76,7 @@ $result = mysqli_query($conn, $sql);
                             </div>
                             
                             <div class="text-right">
-                                <p class="text-sm font-bold text-white">฿<?php echo number_format($item['total_price']); ?></p>
+                                <p class="text-sm font-bold text-white">฿<?php echo number_format($item['item_total']); ?></p>
                             </div>
                         </div>
                         <?php endwhile; ?>
